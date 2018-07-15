@@ -51,6 +51,10 @@ func SetUserData(user User) error {
 func GetUserData(username string) User {
 	var user User
 	DBCon.View(func(tx *bolt.Tx) error {
+		bucket := tx.Bucket([]byte("DB")).Bucket([]byte(username))
+		if bucket == nil {
+			return nil
+		}
 		userBytes := tx.Bucket([]byte("DB")).Bucket([]byte(username)).Get([]byte("pronouns"))
 		err := json.Unmarshal(userBytes, &user)
 		if err != nil {
