@@ -1,16 +1,35 @@
 package main
 
 import (
-	"github.com/wheresalice/pronounsapi/lib"
+	"github.com/coreos/bbolt"
 	"log"
+	"github.com/wheresalice/pronounsapi/lib/database"
 )
 
 func main() {
-	lib.ExecSQL("CREATE TABLE IF NOT EXISTS accounts (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), username STRING, UNIQUE(username))")
-	lib.ExecSQL("CREATE TABLE IF NOT EXISTS pronouns (accountid UUID, pronouns STRING[], UNIQUE(accountid))")
+	database.DBCon, database.Err = bolt.Open("data/bolt.db", 0600, nil)
+	if database.Err != nil {
+		log.Fatalf("could not open db, %v", database.Err)
+	}
 
-	lib.NewUser("alice")
-	lib.SetUserPronoun("alice", []string{"They/Them"})
+	err := database.CreateUserBucket("alice")
+	if err != nil {
+		log.Fatalf("could create user bucket, %v", err)
+	}
 
-	log.Printf("%s: %v", "alice", lib.GetUserPronouns("alice"))
+	alice := database.User{Username: "alice", Pronouns: []string{"They/them"}}
+	err = database.SetUserData(alice)
+	if err != nil {
+		log.Fatalf("could set user data, %v", err)
+	}
+
+	database.DBCon.View(func(tx *bolt.Tx) error {
+		err = tx.CopyFile("data/backup.db", 0600)
+		if err != nil {
+			log.Fatalf("could not back up database, %v", err)
+		}
+		return nil
+	})
+
+	log.Print("DB Setup Done")
 }

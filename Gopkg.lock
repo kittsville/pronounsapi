@@ -2,6 +2,12 @@
 
 
 [[projects]]
+  name = "github.com/coreos/bbolt"
+  packages = ["."]
+  revision = "583e8937c61f1af6513608ccc75c97b6abdf4ff9"
+  version = "v1.3.0"
+
+[[projects]]
   name = "github.com/go-sql-driver/mysql"
   packages = ["."]
   revision = "d523deb1b23d913de5bdada721a6071e71283618"
@@ -56,6 +62,12 @@
   revision = "4cb1c02c05b0e749b0365f61ae859a8e0cfceed9"
 
 [[projects]]
+  branch = "master"
+  name = "golang.org/x/sys"
+  packages = ["unix"]
+  revision = "ac767d655b305d4e9612f5f6e33120b9176c4ad4"
+
+[[projects]]
   name = "google.golang.org/appengine"
   packages = ["cloudsql"]
   revision = "b1f26356af11148e710935ed1ac8a7f5702c7612"
@@ -64,6 +76,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "8a30f2f8dd89702a5cfe2de19e3a2c6c6bb1de57add99354eaf750af65ef38cf"
+  inputs-digest = "df33743977137bc5fbf780f4640326ec5abafb96a54d383ae53210d9b18ccd52"
   solver-name = "gps-cdcl"
   solver-version = 1
